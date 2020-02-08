@@ -24,7 +24,7 @@ public class FirstTest {
 
         capabilities.setCapability("platformName", "Android");
         capabilities.setCapability("deviceName", "AndroidTestDevice");
-        capabilities.setCapability("platformVersion", "7.0");
+        capabilities.setCapability("platformVersion", "8.1");
         capabilities.setCapability("automationName", "Appium");
         capabilities.setCapability("appPackage", "org.wikipedia");
         capabilities.setCapability("appActivity", ".main.MainActivity");
@@ -42,17 +42,9 @@ public class FirstTest {
     @Test
     public void firstTest()
     {
-        // Скип велком страницы
-        waitForElementAndClick(
-                By.xpath("//*[contains(@text,'SKIP')]"),
-                "Element can not find",
-                5
-        );
-
-
         // Ищем поле поиска по xpath и кликаем по нему
         waitForElementAndClick(
-                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                By.id("org.wikipedia:id/search_container"),
                 "Element can not find",
                 5
         );
@@ -60,7 +52,7 @@ public class FirstTest {
 
         // Вводим ключевое слово
         waitForElementAndSendKeys(
-                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]"),
+                By.id("org.wikipedia:id/search_container"),
                 "Java",
                 "Element can not find",
                 5
@@ -79,13 +71,6 @@ public class FirstTest {
     @Test
     public void testCancelSearch()
     {
-        // Скип велком страницы
-        waitForElementAndClick(
-                By.xpath("//*[contains(@text,'SKIP')]"),
-                "Element can not find",
-                5
-        );
-
         // Ищем поле поиска по id и кликаем по нему
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
@@ -108,16 +93,16 @@ public class FirstTest {
                 5
         );
 
-        // Ищем стрелку назад и кликаем по ней
+        // Ищем крестик назад и кликаем по ней
         waitForElementAndClick(
-                By.xpath("//*[contains(@class, 'android.widget.ImageButton')]"),
+                By.id("org.wikipedia:id/search_close_btn"),
                 "Element not found",
                 5
         );
 
         // Проверяем, что заданный элемент отсутствует на экране
         waitForElementNotPresent(
-                By.xpath("//*[contains(@class, 'android.widget.ImageButton')]"),
+                By.xpath("org.wikipedia:id/search_close_btn"),
                 "Element found",
                 5
         );
@@ -128,13 +113,6 @@ public class FirstTest {
     @Test
     public void testCompareArticleTitle()
     {
-        // Скип велком страницы
-        waitForElementAndClick(
-                By.xpath("//*[contains(@text,'SKIP')]"),
-                "Element can not find",
-                5
-        );
-
         // Ищем поле поиска по id и кликаем по нему
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
@@ -152,18 +130,18 @@ public class FirstTest {
 
         // Клик по результату c описанием java языка
         waitForElementAndClick(
-                By.xpath("//*[@class='android.view.ViewGroup']//*[@text='Java (programming language)']"),
+                By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout[2]/android.view.ViewGroup/android.support.v4.view.ViewPager/android.view.ViewGroup/android.widget.FrameLayout/android.support.v7.widget.RecyclerView/android.widget.FrameLayout[2]/android.widget.RelativeLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.LinearLayout[1]"),
                 "Cannot find result by request 'Java'",
                 5
         );
 
         WebElement page_element = waitForElementPresents(
-                By.id("org.wikipedia:id/page_web_view"),
+                By.id("org.wikipedia:id/view_page_title_text"),
                 "Page not found",
                 15
         );
 
-        String article_title = page_element.getAttribute("content-desc");
+        String article_title = page_element.getAttribute("text");
 
         Assert.assertEquals(
                 "We see unexpected title",
