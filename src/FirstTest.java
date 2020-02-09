@@ -40,56 +40,46 @@ public class FirstTest {
     }
 
     /*
-    Ex3: Тест: отмена поиска
+    Ex4*: Тест: проверка слов в поиске
     Написать тест, который:
     -Ищет какое-то слово
-    -Убеждается, что найдено несколько статей
-    -Отменяет поиск
-    -Убеждается, что результат поиска пропал
+    -Убеждается, что в каждом результате поиска есть это слово
     */
 
     @Test
-    public void cancelSearch()
+    public void testCheckingWordsInSearch()
     {
+        // Клик по сроке поиска
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
-                "Element 'search_container' can not find",
+                "Element can not find",
                 5
         );
 
-        WebElement element_containerSearchAndTextInput = waitForElementAndSendKeys(
+        String requestWorld = "Java";
+
+        // Ввод запроса в строку поиска
+        waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
-                "Java",
-                "Failed inter search request 'Java' ",
-                3
-        );
-
-        String placeholderSearch = element_containerSearchAndTextInput.getAttribute("text");
-
-        Assert.assertNotEquals(
-                "Search container is empty",
-                "Search…",
-                placeholderSearch
-        );
-
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "Element not found",
+                requestWorld,
+                "Failed inter search request 'Java'",
                 5
         );
 
-        WebElement element_searchContainer =  waitForElementPresents(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Element 'search_container' can not find",
-                5
-        );
+        // Убираем клавиатуру
+        driver.hideKeyboard();
 
-        String searchContainer = element_searchContainer.getAttribute("text");
-        Assert.assertEquals(
-                "Search container is not empty",
-                "Search…",
-                searchContainer
-        );
+        // Строим лист со всеми найденными результатами поиска
+        ArrayList<WebElement> list = new ArrayList<>(
+                driver.findElement(By.id("org.wikipedia:id/search_results_list"))
+                        .findElements(By.id("org.wikipedia:id/page_list_item_title")));
+
+        // Проверяем каждый результат поиска на наличие запрашиваемого слова, и в случаи не совпадения тест падает
+        for(WebElement s : list){
+            String requestResult = s.getAttribute("text").toLowerCase();
+            String message_error = "Result '"+ requestResult +"' do not have request word '"+ requestWorld + "'";
+            Assert.assertTrue(message_error, requestResult.contains(requestWorld.toLowerCase()));
+        }
     }
 
     // Метод для ожидания появления элемента
