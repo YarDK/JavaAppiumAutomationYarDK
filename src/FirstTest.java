@@ -39,12 +39,185 @@ public class FirstTest {
         driver.quit();
     }
 
-    /*
-    Ex4*: Тест: проверка слов в поиске
-    Написать тест, который:
-    -Ищет какое-то слово
-    -Убеждается, что в каждом результате поиска есть это слово
-    */
+    // Кейс Клик по поиску, ввод Java, проверка наличия валидного результата
+    @Test
+    public void firstTest()
+    {
+        // Ищем поле поиска по xpath и кликаем по нему
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Element can not find",
+                5
+        );
+
+
+        // Вводим ключевое слово
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_container"),
+                "Java",
+                "Element can not find",
+                5
+        );
+
+
+        // Проверяем, что результы поиска содержат ключевое слово
+        waitForElementPresents(
+                By.xpath("//*[@class='android.view.ViewGroup']//*[@text='Java']"),
+                "Cannot find result by request 'Java'"
+        );
+
+    }
+
+    // Кейс клик по поиску, ввод слова Java, удаление слова, возврат на главное меню
+    @Test
+    public void testCancelSearch()
+    {
+        // Ищем поле поиска по id и кликаем по нему
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Element can not find",
+                5
+        );
+
+        // Ищем поле поиска по id и вводим Java
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_container"),
+                "Java",
+                "",
+                5
+        );
+
+        // Удаляем введенное слово
+        waitElementAndClear(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find search find",
+                5
+        );
+
+        // Ищем крестик назад и кликаем по нему
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Element not found",
+                5
+        );
+
+        // Проверяем, что заданный элемент отсутствует на экране
+        waitForElementNotPresent(
+                By.xpath("org.wikipedia:id/search_close_btn"),
+                "Element found",
+                5
+        );
+
+    }
+
+    // Кейс клик по поиску, ввод слова Java, клик по результату, проверка наличия искомого слова в названии статьи
+    @Test
+    public void testCompareArticleTitle()
+    {
+        // Ищем поле поиска по id и кликаем по нему
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Element can not find",
+                5
+        );
+
+        // Ищем поле поиска по id и вводим Java
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_container"),
+                "Java",
+                "",
+                5
+        );
+
+        // Клик по результату c описанием java языка
+        waitForElementAndClick(
+                By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout[2]/android.view.ViewGroup/android.support.v4.view.ViewPager/android.view.ViewGroup/android.widget.FrameLayout/android.support.v7.widget.RecyclerView/android.widget.FrameLayout[2]/android.widget.RelativeLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.LinearLayout[1]"),
+                "Cannot find result by request 'Java'",
+                5
+        );
+
+        WebElement page_element = waitForElementPresents(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Page not found",
+                15
+        );
+
+        String article_title = page_element.getAttribute("text");
+
+        Assert.assertEquals(
+                "We see unexpected title",
+                "Java (programming language)",
+                article_title
+        );
+    }
+
+    @Test
+    public void checkSearch()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Element can not find",
+                5
+        );
+        // org.wikipedia:id/search_src_text
+        WebElement page_element = waitForElementPresents(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Page not found",
+                15
+        );
+
+        String article_title = page_element.getAttribute("text");
+
+        Assert.assertEquals(
+                "Can not find 'Search'",
+                "Search…",
+                article_title
+        );
+    }
+
+    @Test
+    public void cancelSearch()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Element 'search_container' can not find",
+                5
+        );
+
+        WebElement element_searchContainerAndInterText = waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Java",
+                "Failed inter search request 'Java' ",
+                3
+        );
+
+        String placeholderSearch = element_searchContainerAndInterText.getAttribute("text");
+
+        Assert.assertNotEquals(
+                "Search container is empty",
+                "Search…",
+                placeholderSearch
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Element not found",
+                5
+        );
+
+        WebElement element_searchContainer =  waitForElementPresents(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Element 'search_container' can not find",
+                5
+        );
+
+        String searchContainer = element_searchContainer.getAttribute("text");
+        Assert.assertEquals(
+                "Search container is not empty",
+                "Search…",
+                searchContainer
+        );
+    }
 
     @Test
     public void testCheckingWordsInSearch()
@@ -80,6 +253,7 @@ public class FirstTest {
             String message_error = "Result '"+ requestResult +"' do not have request word '"+ requestWorld + "'";
             Assert.assertTrue(message_error, requestResult.contains(requestWorld.toLowerCase()));
         }
+
     }
 
     // Метод для ожидания появления элемента
