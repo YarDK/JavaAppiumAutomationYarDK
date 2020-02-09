@@ -39,29 +39,56 @@ public class FirstTest {
         driver.quit();
     }
 
-    // Ex2: Создание метода
-    // Написать функцию, которая проверяет наличие текста “Search…” в строке поиска перед вводом текста и помечает тест упавшим, если такого текста нет.
+    /*
+    Ex3: Тест: отмена поиска
+    Написать тест, который:
+    -Ищет какое-то слово
+    -Убеждается, что найдено несколько статей
+    -Отменяет поиск
+    -Убеждается, что результат поиска пропал
+    */
+
     @Test
-    public void checkSearch()
+    public void cancelSearch()
     {
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
-                "Element can not find",
+                "Element 'search_container' can not find",
                 5
         );
-        // org.wikipedia:id/search_src_text
-        WebElement page_element = waitForElementPresents(
+
+        WebElement element_containerSearchAndTextInput = waitForElementAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
-                "Page not found",
-                15
+                "Java",
+                "Failed inter search request 'Java' ",
+                3
         );
 
-        String article_title = page_element.getAttribute("text");
+        String placeholderSearch = element_containerSearchAndTextInput.getAttribute("text");
 
-        Assert.assertEquals(
-                "Can not find 'Search'",
+        Assert.assertNotEquals(
+                "Search container is empty",
                 "Search…",
-                article_title
+                placeholderSearch
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Element not found",
+                5
+        );
+
+        WebElement element_searchContainer =  waitForElementPresents(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Element 'search_container' can not find",
+                5
+        );
+
+        String searchContainer = element_searchContainer.getAttribute("text");
+        Assert.assertEquals(
+                "Search container is not empty",
+                "Search…",
+                searchContainer
         );
     }
 
