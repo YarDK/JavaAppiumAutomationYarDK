@@ -1,4 +1,5 @@
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
 import org.junit.Assert;
@@ -11,7 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
-import java.sql.SQLOutput;
+import java.util.*;
 
 public class FirstTest {
 
@@ -38,105 +39,19 @@ public class FirstTest {
         driver.quit();
     }
 
-    // Кейс Клик по поиску, ввод Java, проверка наличия валидного результата
+    // Ex2: Создание метода
+    // Написать функцию, которая проверяет наличие текста “Search…” в строке поиска перед вводом текста и помечает тест упавшим, если такого текста нет.
     @Test
-    public void firstTest()
+    public void checkSearch()
     {
-        // Ищем поле поиска по xpath и кликаем по нему
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
                 "Element can not find",
                 5
         );
-
-
-        // Вводим ключевое слово
-        waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_container"),
-                "Java",
-                "Element can not find",
-                5
-        );
-
-
-        // Проверяем, что результы поиска содержат ключевое слово
-        waitForElementPresents(
-                By.xpath("//*[@class='android.view.ViewGroup']//*[@text='Java']"),
-                "Cannot find result by request 'Java'"
-        );
-
-    }
-
-    // Кейс клик по поиску, ввод слова Java, удаление слова, возврат на главное меню
-    @Test
-    public void testCancelSearch()
-    {
-        // Ищем поле поиска по id и кликаем по нему
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Element can not find",
-                5
-        );
-
-        // Ищем поле поиска по id и вводим Java
-        waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_container"),
-                "Java",
-                "",
-                5
-        );
-
-        // Удаляем введенное слово
-        waitElementAndClear(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Cannot find search find",
-                5
-        );
-
-        // Ищем крестик назад и кликаем по ней
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "Element not found",
-                5
-        );
-
-        // Проверяем, что заданный элемент отсутствует на экране
-        waitForElementNotPresent(
-                By.xpath("org.wikipedia:id/search_close_btn"),
-                "Element found",
-                5
-        );
-
-    }
-
-    // Кейс клик по поиску, ввод слова Java, клик по результату, проверка наличия искомого слова в названии статьи
-    @Test
-    public void testCompareArticleTitle()
-    {
-        // Ищем поле поиска по id и кликаем по нему
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Element can not find",
-                5
-        );
-
-        // Ищем поле поиска по id и вводим Java
-        waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_container"),
-                "Java",
-                "",
-                5
-        );
-
-        // Клик по результату c описанием java языка
-        waitForElementAndClick(
-                By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.LinearLayout[2]/android.view.ViewGroup/android.support.v4.view.ViewPager/android.view.ViewGroup/android.widget.FrameLayout/android.support.v7.widget.RecyclerView/android.widget.FrameLayout[2]/android.widget.RelativeLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.LinearLayout[1]"),
-                "Cannot find result by request 'Java'",
-                5
-        );
-
+        // org.wikipedia:id/search_src_text
         WebElement page_element = waitForElementPresents(
-                By.id("org.wikipedia:id/view_page_title_text"),
+                By.id("org.wikipedia:id/search_src_text"),
                 "Page not found",
                 15
         );
@@ -144,8 +59,8 @@ public class FirstTest {
         String article_title = page_element.getAttribute("text");
 
         Assert.assertEquals(
-                "We see unexpected title",
-                "Java (programming language)",
+                "Can not find 'Search'",
+                "Search…",
                 article_title
         );
     }
@@ -190,6 +105,16 @@ public class FirstTest {
         WebElement element = waitForElementPresents(by, error_massage, timeoutInSeconds);
         element.clear();
         return element;
+    }
+
+    // Кастомный метод скрола. Делает свайп от элемента From к элементу To
+    private void customSwipe(By from, By to)
+    {
+        WebElement resource = driver.findElement(from);
+        WebElement openid = driver.findElement(to);
+        TouchAction action = new TouchAction(driver);
+        action.press(resource).moveTo(openid).release();
+        action.perform();
     }
 
 }
