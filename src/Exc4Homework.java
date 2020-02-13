@@ -12,11 +12,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.File;
 import java.net.URL;
-import java.sql.SQLOutput;
 
-public class ThirdTest {
+public class Exc4Homework {
     private AppiumDriver driver;
 
     @Before
@@ -41,134 +39,61 @@ public class ThirdTest {
         driver.quit();
     }
 
-    @Test
-    public void testCompareArticleTitle() {
-        // Ищем поле поиска по id и кликаем по нему
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Element 'search_container' can not find",
-                5
-        );
-
-        // Ищем поле поиска по id и вводим Java
-        waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Appium",
-                "Element 'search_src_text' can not find",
-                5
-        );
-
-        // Клик по результату c описанием java языка
-        waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Appium']"),
-                "Cannot find result with text 'Appium'",
-                5
-        );
-
-        // Скролл страницы, пока не будет найден элемент
-        swipeUpToFindElement(
-                By.xpath("//*[@text='View page in browser']"),
-                "Text 'View page in browser' not found on page.",
-                20
-        );
-    }
+    /*
+    Написать тест, который:
+    1. Сохраняет две статьи в одну папку
+    2. Удаляет одну из статей
+    3. Убеждается, что вторая осталась
+    4. Переходит в неё и убеждается, что title совпадает
+    */
 
     @Test
-    public void saveFirstArticleToMyList()
+    public void testSavingTwoArticles()
     {
-        // Ищем поле поиска по id и кликаем по нему
+        //Нажать на поиск
+        String input_field_search_wikipedia_by_id = "org.wikipedia:id/search_container";
         waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Element 'search_container' can not find",
+                By.id(input_field_search_wikipedia_by_id),
+                "Element 'input_field_search_wikipedia_by_id' can not find",
                 5
         );
 
-        // Ищем поле поиска по id и вводим Java
+        //Ввести Java
+        String request_word_for_search = "Java";
+        String input_field_search_by_id = "org.wikipedia:id/search_src_text";
         waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Java",
-                "Element 'search_src_text' can not find",
+                By.id(input_field_search_by_id),
+                request_word_for_search,
+                "Element 'input_field_search' can not find",
                 5
         );
 
-        // Клик по результату c описанием java языка
-        waitForElementAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Java (programming language)']"),
-                "Cannot find result with text 'Java (programming language)'.",
-                5
-        );
-
-        waitingForElement(5000);
-
-        waitForElementAndClick(
-                By.xpath("//android.support.v7.widget.LinearLayoutCompat//android.widget.ImageView[@content-desc='More options']"),
-                "Element 'More options' can not find.",
-                5
-        );
-
-        waitingForElement(5000);
-
-        waitForElementAndClick(
-                By.xpath("//*[@text='Add to reading list']"),
-                "Element 'Add to reading list' can not find.",
-                5
-        );
-
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/onboarding_button"),
-                "Element 'onboarding_button 'Got it'' can not find.",
-                5
-        );
-
-        waitForElementAndClear(
-                By.id("org.wikipedia:id/text_input"),
-                "Element 'text_input' can not find.",
-                5
-        );
-
-        waitForElementAndSendKeys2(
-                By.id("org.wikipedia:id/text_input"),
-                //By.xpath("//*[@resource-id='org.wikipedia:id/text_input']"),
-                "Learning Programming",
-                "Element 'text_input' can not find.",
-                3
-        );
-
-
-        waitForElementAndClick(
-                By.xpath("//*[@text='OK']"),
-                "Element 'OK' can not find.",
-                5
-        );
-
-
-        waitForElementAndClick(
-                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
-                "Element 'Navigate up 'X'' can not find.",
-                5
-        );
-
-        waitForElementAndClick(
-                By.xpath("//android.widget.FrameLayout[@content-desc='My lists']"),
-                "Element 'My lists' can not find.",
-                5
-        );
-
-        waitForElementAndClick(
-                By.xpath("//*[@text='Learning Programming']"),
-                "Element 'Learning Programming' can not find.",
-                5
-        );
-
-        swipeElementToLeft(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "Element with text 'Java (programming language)' can not find."
-        );
-
-        waitForElementNotPresent(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "Element with text 'Java (programming language)' can not find.",
-                5);
+        //Открыть статью, где описывается, что это язык программирования
+        
+        //Сохранить в переменную название статьи и сабтитл
+        //Нажать меню
+        //Нажать сохранить статью
+        //Прокликать ОК
+        //Нужно создать папку, но в кейсе и в реале старт этой фичи отличается, нужно разобраться
+        //Сохдать переменную с названием папки
+        //Ввести название папки используя переменную
+        //Подтвердить создание
+        //Закрыть статью
+        //Нажать на поиск
+        //Ввести Python
+        //Открыть статью, где описывается, что это язык программирования
+        //Сохранить в переменную название статьи и сабтитл
+        //Нажать меню
+        //Нажать сохранить статью
+        //Выбрать папку, ранее созданную
+        //Закрыть статью
+        //Открыть окно Мой лист
+        //Открыть папку, ранее созданную
+        //Сделать список элементов из присутствующих статей
+        //Удалить статью, который про Python
+        //Проверить, что вторая статья осталась
+        //Открыть ее
+        //Проверить, что эта статья про JAva
     }
 
     // Метод для ожидания появления элемента
@@ -192,13 +117,6 @@ public class ThirdTest {
 
     // Метод для ввода значения в выбранный элемент
     private WebElement  waitForElementAndSendKeys(By by, String value, String error_massage, long timeoutInSeconds) {
-        WebElement element = waitForElementPresents(by, error_massage, timeoutInSeconds);
-        element.sendKeys(value);
-        return element;
-    }
-
-    // Метод для ввода значения в выбранный элемент
-    private WebElement  waitForElementAndSendKeys2(By by, String value, String error_massage, long timeoutInSeconds) {
         waitForElementPresents(by,error_massage,timeoutInSeconds);
         MobileElement element = (MobileElement) driver.findElement(by);
         element.setValue(value);
@@ -216,14 +134,6 @@ public class ThirdTest {
     private WebElement waitForElementAndClear(By by, String error_massage, long timeoutInSeconds) {
         WebElement element = waitForElementPresents(by, error_massage, timeoutInSeconds);
         element.clear();
-        return element;
-    }
-
-    // Метод для удаления текста
-    private WebElement waitForElementAndClearAndSendKeys(By by, String value, String error_massage, long timeoutInSeconds) {
-        WebElement element = waitForElementPresents(by, error_massage, timeoutInSeconds);
-        element.clear();
-        element.sendKeys(value);
         return element;
     }
 
@@ -286,11 +196,4 @@ public class ThirdTest {
         }
     }
 
-    protected void waitForElementAndTapOfThis(By by, String value, String error_message){
-        WebElement element = waitForElementPresents(by, error_message, 5);
-        TouchAction action = new TouchAction(driver);
-        action.tap(element).release().perform();
-        element.sendKeys(value);
-
-    }
 }
