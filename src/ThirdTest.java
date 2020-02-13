@@ -1,8 +1,8 @@
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -27,7 +27,8 @@ public class ThirdTest {
         capabilities.setCapability("automationName", "Appium");
         capabilities.setCapability("appPackage", "org.wikipedia");
         capabilities.setCapability("appActivity", ".main.MainActivity");
-        capabilities.setCapability("app", "D:\\IdeaProjects\\JavaAppiumAutomationYarDK\\apks\\org.wikipedia.apk");
+        capabilities.setCapability("multiple", "false");
+        capabilities.setCapability("app", "C:\\Users\\yako\\IdeaProjects\\JavaAppiumAutomationYarDK\\apks\\org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
     }
@@ -94,13 +95,15 @@ public class ThirdTest {
                 5
         );
 
+        waitingForElement(5000);
+
         waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@content-desc='More options']"),
+                By.xpath("//android.support.v7.widget.LinearLayoutCompat//android.widget.ImageView[@content-desc='More options']"),
                 "Element 'More options' can not find.",
                 5
         );
 
-        waitingForElement();
+        waitingForElement(5000);
 
         waitForElementAndClick(
                 By.xpath("//*[@text='Add to reading list']"),
@@ -114,12 +117,20 @@ public class ThirdTest {
                 5
         );
 
-        waitForElementAndSendKeys(
+        waitForElementAndClear(
                 By.id("org.wikipedia:id/text_input"),
+                "Element 'text_input' can not find.",
+                5
+        );
+
+        waitForElementAndSendKeys2(
+                By.id("org.wikipedia:id/text_input"),
+                //By.xpath("//*[@resource-id='org.wikipedia:id/text_input']"),
                 "Learning Programming",
                 "Element 'text_input' can not find.",
-                1
+                3
         );
+
 
         waitForElementAndClick(
                 By.xpath("//*[@text='OK']"),
@@ -177,9 +188,17 @@ public class ThirdTest {
     }
 
     // Метод для ввода значения в выбранный элемент
-    private WebElement waitForElementAndSendKeys(By by, String value, String error_massage, long timeoutInSeconds) {
+    private WebElement  waitForElementAndSendKeys(By by, String value, String error_massage, long timeoutInSeconds) {
         WebElement element = waitForElementPresents(by, error_massage, timeoutInSeconds);
         element.sendKeys(value);
+        return element;
+    }
+
+    // Метод для ввода значения в выбранный элемент
+    private WebElement  waitForElementAndSendKeys2(By by, String value, String error_massage, long timeoutInSeconds) {
+        waitForElementPresents(by,error_massage,timeoutInSeconds);
+        MobileElement element = (MobileElement) driver.findElement(by);
+        element.setValue(value);
         return element;
     }
 
@@ -256,11 +275,19 @@ public class ThirdTest {
                 .perform();
     }
 
-    protected void waitingForElement(){
+    protected void waitingForElement(int timeForWaiting){
         try{
-            Thread.sleep(2000);
+            Thread.sleep(timeForWaiting);
         }catch (Exception e){
             System.out.println(e);
         }
+    }
+
+    protected void waitForElementAndTapOfThis(By by, String value, String error_message){
+        WebElement element = waitForElementPresents(by, error_message, 5);
+        TouchAction action = new TouchAction(driver);
+        action.tap(element).release().perform();
+        element.sendKeys(value);
+
     }
 }
