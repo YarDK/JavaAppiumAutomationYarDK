@@ -69,7 +69,7 @@ public class Exc4Homework {
     }
 
     @Test
-    public void testTow()
+    public void testTwo()
     {
         //Нажать на поиск
         String input_field_search_wikipedia_by_id = "org.wikipedia:id/search_container";
