@@ -5,10 +5,7 @@ import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -32,7 +29,10 @@ public class Exc4Homework {
         //capabilities.setCapability("app", "C:\\Users\\yako\\IdeaProjects\\JavaAppiumAutomationYarDK\\apks\\org.wikipedia.apk");
         capabilities.setCapability("app", "D:\\IdeaProjects\\JavaAppiumAutomationYarDK\\apks\\org.wikipedia.apk");
 
+
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver.rotate(ScreenOrientation.PORTRAIT);
+
     }
 
     @After
@@ -41,14 +41,14 @@ public class Exc4Homework {
     }
 
     /*
-    Написать тест, который открывает статью и убеждается, что у нее есть элемент title.
-    Важно: тест не должен дожидаться появления title, проверка должна производиться сразу.
-    Если title не найден - тест падает с ошибкой. Метод можно назвать assertElementPresent.
+    Как нам сделать так, чтобы после теста на поворот экрана сам экран всегда оказывался в правильном положении,
+    даже если тест упал в тот момент, когда экран был наклонен?
     */
 
     @Test
-    public void testAssertTitle()
+    public void testOne()
     {
+
         //Нажать на поиск
         String input_field_search_wikipedia_by_id = "org.wikipedia:id/search_container";
         waitForElementAndClick(
@@ -65,17 +65,28 @@ public class Exc4Homework {
                 "Element 'input_field_search' can not find",
                 5
         );
+        //throw new AssertionError("Throw Assertion with rotation");
+    }
 
-        //Открыть статью, где описывается, что это язык программирования
-        String article_about_java_programming_language = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Java (programming language)']";
+    @Test
+    public void testTow()
+    {
+        //Нажать на поиск
+        String input_field_search_wikipedia_by_id = "org.wikipedia:id/search_container";
         waitForElementAndClick(
-                By.xpath(article_about_java_programming_language),
-                "Cannot find result with text 'Java (programming language)'.",
+                By.id(input_field_search_wikipedia_by_id),
+                "Element 'input_field_search_wikipedia_by_id' can not find",
                 5
         );
 
-        // Посик title
-        assertElementPresent(By.id("org.wikipedia:id/view_page_title_text"));
+        //Ввести Java
+        String input_field_search_by_id = "org.wikipedia:id/search_src_text";
+        waitForElementAndSendKeys(
+                By.id(input_field_search_by_id),
+                "Python",
+                "Element 'input_field_search' can not find",
+                5
+        );
 
 
     }
